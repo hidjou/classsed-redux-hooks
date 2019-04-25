@@ -1,17 +1,19 @@
 import React, { useState } from 'react';
 import uuid from 'uuid/v4';
-import { connect } from 'react-redux';
 import { addTodoAction } from '../redux';
+import { useActions } from 'react-redux';
 
 const TodoInput = (props) => {
-  const [todo, setTodo] = useState('');
+  const [todo, setTodo] = useState('Value');
+  const addTodo = useActions((todo) => addTodoAction(todo));
 
   const onChange = (event) => {
     setTodo(event.target.value);
   };
   const onSubmit = (event) => {
     event.preventDefault();
-    props.addTodoAction({
+    if (todo.trim() === '') return;
+    addTodo({
       id: uuid(),
       name: todo,
       complete: false
@@ -21,23 +23,18 @@ const TodoInput = (props) => {
 
   return (
     <form onSubmit={onSubmit}>
-      <input
-        type="text"
-        name="todo"
-        placeholder="Add a todo"
-        value={todo}
-        onChange={onChange}
-      />
-      <button type="submit">Add</button>
+      <div className="form-div">
+        <input
+          type="text"
+          name="todo"
+          placeholder="Add a todo"
+          value={todo}
+          onChange={onChange}
+        />
+        <button type="submit">Add</button>
+      </div>
     </form>
   );
 };
 
-const mapStateToProps = (state) => ({
-  todos: state.todos
-});
-
-export default connect(
-  mapStateToProps,
-  { addTodoAction }
-)(TodoInput);
+export default TodoInput;

@@ -1,13 +1,29 @@
 import React from 'react';
+// import TodoItem from './TodoItem';
+import { useSelector, useActions } from 'react-redux';
+import { toggleTodoComplete, deleteTodoAction } from '../redux';
 
-import { connect } from 'react-redux';
-import { toggleTodoComplete } from '../redux';
+const TodoList = () => {
+  const todos = useSelector((state) => state.todos);
+  const toggleTodo = useActions((todoId) => toggleTodoComplete(todoId));
+  const deleteTodo = useActions((todoId) => deleteTodoAction(todoId));
 
-const TodoList = (props) => {
-  const { todos } = props;
-  const toggleComplete = (todoId) => {
-    props.toggleTodoComplete(todoId);
-  };
+  // const { toggleTodo, deleteTodo } = useActions({
+  //   toggleTodo: (todoId) => toggleTodoComplete(todoId),
+  //   deleteTodo: (todoId) => deleteTodoAction(todoId)
+  // });
+
+  // const [todos, toggleTodo] = useRedux(
+  //   (state) => state.todos,
+  //   (todoId) => toggleTodoComplete(todoId)
+  // );
+
+  // const [todos, { toggleTodo, deleteTodo }] = useRedux((state) => state.todos, {
+  //   toggleTodo: (todoId) => toggleTodoComplete(todoId),
+  //   deleteTodo: (todoId) => deleteTodoAction(todoId)
+  // });
+
+  console.log(todos);
 
   return (
     <ul className="todo-list">
@@ -16,20 +32,19 @@ const TodoList = (props) => {
           <input
             type="checkbox"
             checked={todo.complete}
-            onChange={toggleComplete.bind(null, todo.id)}
+            onChange={toggleTodo.bind(null, todo.id)}
           />
           <span className={todo.complete ? 'complete' : null}>{todo.name}</span>
+          <span
+            className="delete-button"
+            onClick={deleteTodo.bind(null, todo.id)}
+          >
+            X
+          </span>
         </li>
       ))}
     </ul>
   );
 };
 
-const mapStateToProps = (state) => ({
-  todos: state.todos
-});
-
-export default connect(
-  mapStateToProps,
-  { toggleTodoComplete }
-)(TodoList);
+export default TodoList;
