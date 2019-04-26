@@ -1,8 +1,7 @@
-import { createStore } from 'redux';
+import {configureStore, createSlice} from "redux-starter-kit";
 import uuid from 'uuid/v4';
 
-const initialState = {
-  todos: [
+const initialState = [
     {
       id: uuid(),
       name: 'Read a bit',
@@ -13,52 +12,31 @@ const initialState = {
       name: 'Do laundry',
       complete: false
     }
-  ]
-};
+];
 
-export const store = createStore(
-  reducer,
+const {actions, reducer : todosReducer} = createSlice({
+  slice : "todos",
   initialState,
-  window.devToolsExtension && window.devToolsExtension()
-);
-// Reducer
-function reducer(state, action) {
-  switch (action.type) {
-    case 'ADD_TODO':
-      return {
-        ...state,
-        todos: [...state.todos, action.payload]
-      };
-    case 'TOGGLE_TODO':
-      return {
-        ...state,
-        todos: state.todos.map((todo) =>
-          todo.id === action.payload
-            ? { ...todo, complete: !todo.complete }
-            : todo
-        )
-      };
-    case 'DELETE_TODO':
-      return {
-        ...state,
-        todos: state.todos.filter((todo) => todo.id !== action.payload)
-      };
-    default:
-      return state;
+  reducers : {
+    addTodo(state, action) {
+      // You can "mutate" the state in a reducer, thanks to Immer
+      state.push(action.payload)
+    },
+    toggleTodo(state, action) {
+      const todo = state.find(todo => todo.id === action.payload);
+      todo.complete = !todo.complete;
+    },
+    deleteTodo(state, action) {
+      return state.filter((todo) => todo.id !== action.payload)
+    }
   }
-}
-// Actions
-export const addTodoAction = (todo) => ({
-  type: 'ADD_TODO',
-  payload: todo
+})
+
+// configureStore automatically adds the Redux DevTools and combines reducers
+export const store = configureStore({
+  reducer : {
+    todos : todosReducer
+  }
 });
 
-export const toggleTodoComplete = (todoId) => ({
-  type: 'TOGGLE_TODO',
-  payload: todoId
-});
-
-export const deleteTodoAction = (todoId) => ({
-  type: 'DELETE_TODO',
-  payload: todoId
-});
+export const {addTodo, toggleTodo, deleteTodo} = actions;
