@@ -5,7 +5,7 @@ import { useActions } from 'react-redux';
 
 const TodoInput = (props) => {
   const [todo, setTodo] = useState('Value');
-  const addTodo = useActions((todo) => addTodoAction(todo));
+  const addTodo = useActions(addTodoAction);
 
   const onChange = (event) => {
     setTodo(event.target.value);

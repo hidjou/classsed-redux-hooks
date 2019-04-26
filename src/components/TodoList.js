@@ -5,8 +5,8 @@ import { toggleTodoComplete, deleteTodoAction } from '../redux';
 
 const TodoList = () => {
   const todos = useSelector((state) => state.todos);
-  const toggleTodo = useActions((todoId) => toggleTodoComplete(todoId));
-  const deleteTodo = useActions((todoId) => deleteTodoAction(todoId));
+
+  const actions = useActions({toggleTodoComplete, deleteTodoAction})
 
   // const { toggleTodo, deleteTodo } = useActions({
   //   toggleTodo: (todoId) => toggleTodoComplete(todoId),
@@ -32,12 +32,12 @@ const TodoList = () => {
           <input
             type="checkbox"
             checked={todo.complete}
-            onChange={toggleTodo.bind(null, todo.id)}
+            onChange={() => actions.toggleTodoComplete(todo.id)}
           />
           <span className={todo.complete ? 'complete' : null}>{todo.name}</span>
           <span
             className="delete-button"
-            onClick={deleteTodo.bind(null, todo.id)}
+            onClick={() => actions.deleteTodoAction(todo.id)}
           >
             X
           </span>
