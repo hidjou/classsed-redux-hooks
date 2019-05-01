@@ -1,29 +1,15 @@
 import React from 'react';
-// import TodoItem from './TodoItem';
-import { useSelector, useActions } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { toggleTodoComplete, deleteTodoAction } from '../redux';
 
 const TodoList = () => {
   const todos = useSelector((state) => state.todos);
-  const toggleTodo = useActions((todoId) => toggleTodoComplete(todoId));
-  const deleteTodo = useActions((todoId) => deleteTodoAction(todoId));
-
-  // const { toggleTodo, deleteTodo } = useActions({
-  //   toggleTodo: (todoId) => toggleTodoComplete(todoId),
-  //   deleteTodo: (todoId) => deleteTodoAction(todoId)
-  // });
-
-  // const [todos, toggleTodo] = useRedux(
-  //   (state) => state.todos,
-  //   (todoId) => toggleTodoComplete(todoId)
-  // );
-
-  // const [todos, { toggleTodo, deleteTodo }] = useRedux((state) => state.todos, {
-  //   toggleTodo: (todoId) => toggleTodoComplete(todoId),
-  //   deleteTodo: (todoId) => deleteTodoAction(todoId)
-  // });
-
-  console.log(todos);
+  // Get dispatch
+  const dispatch = useDispatch();
+  // Set reference functions by wrapping action creators with dispatch
+  // (using this instread of useActions since that's been removed)
+  const toggleTodo = (todoId) => dispatch(toggleTodoComplete(todoId));
+  const deleteTodo = (todoId) => dispatch(deleteTodoAction(todoId));
 
   return (
     <ul className="todo-list">

@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import uuid from 'uuid/v4';
 import { addTodoAction } from '../redux';
-import { useActions } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
-const TodoInput = (props) => {
-  const [todo, setTodo] = useState('Value');
-  const addTodo = useActions((todo) => addTodoAction(todo));
+const TodoInput = () => {
+  const [todo, setTodo] = useState('');
+  const dispatch = useDispatch();
+  const addTodo = (todo) => dispatch(addTodoAction(todo));
 
   const onChange = (event) => {
     setTodo(event.target.value);
