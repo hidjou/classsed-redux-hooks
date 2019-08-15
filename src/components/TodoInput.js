@@ -1,24 +1,24 @@
 import React, { useState } from 'react';
 import uuid from 'uuid/v4';
 import { addTodo } from '../redux';
-import { useActions } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 const TodoInput = (props) => {
+  const dispatch = useDispatch();
   const [todo, setTodo] = useState('Value');
-  // Have to give a different name here to avoid a name issue, otherwise `addTodo` is undefined
-  const addTodoAction = useActions(addTodo);
 
   const onChange = (event) => {
     setTodo(event.target.value);
   };
+  
   const onSubmit = (event) => {
     event.preventDefault();
     if (todo.trim() === '') return;
-    addTodoAction({
+    dispatch(addTodo({
       id: uuid(),
       name: todo,
       complete: false
-    });
+    }));
     setTodo('');
   };
 
